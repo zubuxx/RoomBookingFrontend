@@ -18,7 +18,7 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "aot": false,
+            "aot": true,
             "assets": [
               "src/favicon.ico",
               "src/assets"
@@ -34,6 +34,14 @@
             ]
           },
           "configurations": {
+            "local": {
+              "fileReplacements": [
+                {
+                  "replace": "src/app/data.service.ts",
+                  "with": "src/app/data.service.local.ts"
+                }
+              ]
+            },
             "production": {
               "fileReplacements": [
                 {
@@ -71,6 +79,9 @@
           "configurations": {
             "production": {
               "browserTarget": "RoomBookingClient:build:production"
+            },
+            "local": {
+              "browserTarget": "RoomBookingClient:build:local"
             }
           }
         },

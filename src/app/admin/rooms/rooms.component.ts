@@ -15,6 +15,8 @@ export class RoomsComponent implements OnInit {
   rooms: Array<Room>;
   selectedRoom: Room;
   action: string;
+  loadingData = true;
+  message = 'Please wait... getting the list of rooms.';
 
   constructor(private dataService: DataService,
               private route: ActivatedRoute,
@@ -25,6 +27,10 @@ export class RoomsComponent implements OnInit {
     this.dataService.getRooms().subscribe(
       (next) => {
         this.rooms = next;
+        this.loadingData = false;
+      },
+      (error) => {
+        this.message = 'Sorry - something went wrong, please try again!' + error.message;
       }
     );
     // this.route.snapshot.queryParams['id'];
@@ -34,7 +40,9 @@ export class RoomsComponent implements OnInit {
         this.action = null;
         if (id) {
           this.selectedRoom = this.rooms.find(room => room.id === +id);
+          if(this.selectedRoom) console.log("SELECTED!");
           this.action = params['action'];
+
         }
         if (params['action'] === 'add') {
           this.selectedRoom = new Room();
