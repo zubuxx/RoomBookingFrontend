@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {Layout, LayoutCapacity, Room} from "../../../model/Room";
 import {Router} from "@angular/router";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
@@ -18,6 +18,11 @@ export class RoomEditComponent implements OnInit, OnDestroy {
 
   @Input()
   room: Room;
+
+  @Output()
+  dataChangedEvent = new EventEmitter();
+
+  message = '';
 
   layoutEnum = Layout;
   layouts = Object.keys(Layout);
@@ -75,6 +80,7 @@ export class RoomEditComponent implements OnInit, OnDestroy {
 
 
   onSubmit() {
+    this.message = 'Saving data. Please wait...';
     this.room.name = this.roomForm.controls['roomName'].value;
     this.room.location = this.roomForm.controls['location'].value;
     this.room.capacities = new Array<LayoutCapacity>();
@@ -88,19 +94,26 @@ export class RoomEditComponent implements OnInit, OnDestroy {
     if (this.room.id == null) {
       this.dataService.addRoom(this.room).subscribe(
         (next) => {
+          this.dataChangedEvent.emit();
           this.router.navigate(['admin', 'rooms'], {queryParams: {action: 'view', id: next.id}});
+        },
+        (error) => {
+          this.message = 'Error has occured!';
         }
       );
     } else {
       this.dataService.updateRomm(this.room).subscribe(
         (next) => {
+          this.dataChangedEvent.emit();
           this.router.navigate(['admin', 'rooms'], {queryParams: {action: 'view', id: next.id}});
+        },
+        (error) => {
+          this.message = "Something went wrong. Please try again later.";
+
         }
       );
     }
 
-    console.log(this.room);
-    console.log(this.roomForm);
     // call a method in a date service to save the room.
   }
 

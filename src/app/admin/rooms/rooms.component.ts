@@ -17,6 +17,7 @@ export class RoomsComponent implements OnInit {
   action: string;
   loadingData = true;
   message = 'Please wait... getting the list of rooms.';
+  reloadAttemps = 0;
 
   constructor(private dataService: DataService,
               private route: ActivatedRoute,
@@ -24,23 +25,18 @@ export class RoomsComponent implements OnInit {
               private formResetService: FormResetService) { }
 
   ngOnInit(): void {
-    this.dataService.getRooms().subscribe(
-      (next) => {
-        this.rooms = next;
-        this.loadingData = false;
-      },
-      (error) => {
-        this.message = 'Sorry - something went wrong, please try again!' + error.message;
-      }
-    );
+    this.loadData();
     // this.route.snapshot.queryParams['id'];
+  }
+
+  private processUrlParams() {
     this.route.queryParams.subscribe(
       (params) => {
         const id = params['id'];
         this.action = null;
         if (id) {
           this.selectedRoom = this.rooms.find(room => room.id === +id);
-          if(this.selectedRoom) console.log("SELECTED!");
+          if (this.selectedRoom) console.log("SELECTED!");
           this.action = params['action'];
 
         }
@@ -49,6 +45,31 @@ export class RoomsComponent implements OnInit {
           this.action = 'edit';
           this.formResetService.resetRoomFormEvent.emit(this.selectedRoom);
         }
+      }
+    );
+  }
+
+  private loadData() {
+    this.dataService.getRooms().subscribe(
+      (next) => {
+        this.rooms = next;
+        this.loadingData = false;
+      },
+      (error) => {
+        if (error.status === 402) {
+          this.message = 'Sorry - you need to pay to use this application';
+        } else {
+          this.reloadAttemps++;
+          if (this.reloadAttemps <= 10) {
+            this.message = 'Sorry - something went wrong, please trying again!... please wait! ';
+            setTimeout(() => this.loadData(), 1500);
+          } else {
+            this.message = ' Sorry - something went wrong, please contact support.';
+          }
+        }
+      },
+      () => {
+        this.processUrlParams();
       }
     );
   }

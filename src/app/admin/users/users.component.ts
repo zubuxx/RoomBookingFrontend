@@ -14,6 +14,9 @@ export class UsersComponent implements OnInit {
   users: Array<User>;
   selectedUser: User;
   action: string;
+  message = 'The page is loading. Please wait.';
+  isLoading = true;
+  loadingAttempts = 0;
 
   constructor(private dataService: DataService,
               private route: ActivatedRoute,
@@ -21,26 +24,42 @@ export class UsersComponent implements OnInit {
               private formResetService: FormResetService) { }
 
   ngOnInit(): void {
-    this.dataService.getUsers().subscribe(
-      (next) => {
-        this.users = next;
-      }
-    );
+    this.loadData();
 
+
+  }
+
+  private processUrlParams() {
     this.route.queryParams.subscribe(
       (params) => {
         const id = params['id'];
         this.action = params['action'];
         if (id) {
           this.selectedUser = this.users.find(user => user.id === +id);
-        }
-        else {
+        } else {
           this.selectedUser = new User();
           this.formResetService.resetUserFormEvent.emit(this.selectedUser);
         }
       }
     );
+  }
 
+  private loadData() {
+    this.dataService.getUsers().subscribe(
+      (next) => {
+        this.users = next;
+        this.isLoading = false;
+      },
+      (error) => {
+        if (this.loadingAttempts < 10) {
+          this.loadingAttempts++;
+          setTimeout(() => this.loadData(), 700);
+        } else {
+         this.message = "Sorry, something went wrong. Please contact support.";
+        }
+      },
+      () => this.processUrlParams()
+    );
   }
 
   setUser(id: number) {

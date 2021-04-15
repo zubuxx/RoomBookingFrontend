@@ -62,20 +62,22 @@ export class DataService {
       }
 
   updateUser(user: User) : Observable<User> {
-    return of(null);
+    return this.http.put<User>(environment.restUrl + '/api/v1/users', user);
   }
 
   addUser(newUser: User, password: string) : Observable<User> {
-    return of(null);
+    const fullUser = {id: newUser.id, name: newUser.name, password: password};
+    return this.http.post<User>(environment.restUrl + '/api/v1/users', fullUser);
   }
 
   updateRomm(room: Room) : Observable<Room> {
-    return of(null);
+    return this.http.put<Room>(environment.restUrl +  '/api/v1/rooms', Room.toHttp(room));
 
   }
 
   addRoom(newRoom : Room) : Observable<Room> {
-    return of(null);
+    return this.http.post<Room>(environment.restUrl +  '/api/v1/rooms', Room.toHttp(newRoom));
+    // return of(null);
 
   }
 
@@ -84,6 +86,7 @@ export class DataService {
   }
 
   deleteUser(id: number) : Observable<any> {
+    // return this.http.delete(environment.restUrl + 'api/v1/users');
     return of(null);
   }
 

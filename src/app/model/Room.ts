@@ -15,6 +15,17 @@ export class Room {
     }
     return newRoom;
   }
+
+  static toHttp(room: Room) {
+    const layouts = new Array<LayoutCapacity>();
+    for (const layout of room.capacities) {
+      layouts.push(LayoutCapacity.toHttp(layout))
+    }
+    const httpRoom = {
+      id: room.id, name: room.name, location: room.location, capacities : layouts
+    };
+    return httpRoom;
+  }
 }
 
 export class LayoutCapacity {
@@ -27,6 +38,16 @@ export class LayoutCapacity {
     newLc.layout = Layout[lc.layout];
     return newLc;
   }
+
+  static toHttp(lc: LayoutCapacity) : LayoutCapacity {
+    const layout = Object.keys(Layout).find(key => Layout[key] === lc.layout);
+    const newLc = {
+      layout: layout,
+      capacity: lc.capacity
+    };
+    return <LayoutCapacity>newLc;
+  }
+
 }
 
 export enum Layout {
