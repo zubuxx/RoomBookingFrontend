@@ -16,14 +16,17 @@ import { AddUserComponent } from './admin/users/add-user/add-user.component';
 import { RoomEditComponent } from './admin/rooms/room-edit/room-edit.component';
 import { EditBookingComponent } from './calendar/edit-booking/edit-booking.component';
 import {HttpClientModule} from "@angular/common/http";
+import {PrefetchRoomsService} from "./prefetch-rooms.service";
+import {PrefetchUsersService} from "./prefetch-users.service";
 
 
 const routes: Routes = [
   {path: 'admin/users', component : UsersComponent},
   {path : 'admin/rooms', component : RoomsComponent},
   {path : '', component : CalendarComponent},
-  {path : 'editBooking', component: EditBookingComponent},
-  {path : 'addBooking', component: EditBookingComponent},
+  {path : 'addBooking', component: EditBookingComponent, resolve : {rooms : PrefetchRoomsService,
+    users: PrefetchUsersService}},
+  {path : 'editBooking', component: EditBookingComponent, resolve : {rooms : PrefetchRoomsService, users: PrefetchUsersService}},
   {path : '404', component : PageNotFoundComponent},
   {path : '**', redirectTo : '/404'}
 ];
@@ -41,7 +44,7 @@ const routes: Routes = [
     UserEditComponent,
     AddUserComponent,
     RoomEditComponent,
-    EditBookingComponent
+    EditBookingComponent,
   ],
   imports: [
     BrowserModule,

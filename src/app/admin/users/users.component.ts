@@ -14,7 +14,7 @@ export class UsersComponent implements OnInit {
   users: Array<User>;
   selectedUser: User;
   action: string;
-  message = 'The page is loading. Please wait.';
+  message = '';
   isLoading = true;
   loadingAttempts = 0;
 
@@ -25,8 +25,6 @@ export class UsersComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
-
-
   }
 
   private processUrlParams() {
@@ -45,6 +43,7 @@ export class UsersComponent implements OnInit {
   }
 
   private loadData() {
+    this.message = 'The page is loading. Please wait.';
     this.dataService.getUsers().subscribe(
       (next) => {
         this.users = next;

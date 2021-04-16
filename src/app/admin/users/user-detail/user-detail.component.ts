@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {User} from "../../../model/User";
 import {DataService} from "../../../data.service";
 import {Router} from "@angular/router";
@@ -12,6 +12,13 @@ export class UserDetailComponent implements OnInit {
 
   @Input()
   user: User;
+
+  @Output()
+  dataChangedEvent = new EventEmitter();
+
+  message = '';
+  passwordMessage = '';
+  passwordResetSuccess = false;
 
   constructor(private router: Router,
               private dataService: DataService) { }
@@ -27,17 +34,31 @@ export class UserDetailComponent implements OnInit {
     this.router.navigate(['admin', 'users'], {queryParams : {id : this.user.id,
       action : 'edit'}});
   }
-  delteUser() {
+  deleteUser() {
+    this.message = 'Deleting...';
     this.dataService.deleteUser(this.user.id).subscribe(
       next => {
+        this.dataChangedEvent.emit();
         this.router.navigate(['admin', 'users']);
+      },
+      (error) => {
+        this.message = "Sorry - this room cannot be deleted at this time.";
       }
     );
   }
 
 
   resetPassword() {
-    this.dataService.resetUserPassword(this.user.id).subscribe();
+    this.dataService.resetUserPassword(this.user.id).subscribe(
+      (next) => {
+        this.passwordMessage = 'Password has been reseted.';
+        this.passwordResetSuccess = true;
+      },
+      (error) => {
+        this.passwordMessage = 'Error. Cannot reset the password.';
+        this.passwordResetSuccess = false;
+      }
+    );
   }
 
 }
