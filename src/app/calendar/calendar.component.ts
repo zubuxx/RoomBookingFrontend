@@ -22,28 +22,41 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
   resetSubscription: Subscription;
 
+  dataLoaded = false;
+
+  message = '';
+
   ngOnInit(): void {
-
-    this.route.queryParams.subscribe(
-      params => {
-        this.selectedDate = params['date'];
-        if(!this.selectedDate) {
-          this.selectedDate = formatDate(new Date(), 'yyyy-MM-dd', 'en-GB');
-
-        }
-        this.resetSubscription = this.dataService.getBookings(this.selectedDate).subscribe(
-          (next) => {
-            this.bookings = next;
-          }
-        );
-      }
-    )
+    this.loadData();
 
 
     // const data = formatDate(this.selectDate, 'yyyy-MM-dd', 'pl-PL');
 
   }
 
+
+  private loadData() {
+    this.message = 'Loading data...'
+    this.route.queryParams.subscribe(
+      params => {
+        this.selectedDate = params['date'];
+        if (!this.selectedDate) {
+          this.selectedDate = formatDate(new Date(), 'yyyy-MM-dd', 'en-GB');
+
+        }
+        this.resetSubscription = this.dataService.getBookings(this.selectedDate).subscribe(
+          (next) => {
+            this.bookings = next;
+            this.dataLoaded = true;
+            this.message = '';
+          },
+          (error) => {
+            this.message = 'Sorry, the data could not be loaded.';
+          }
+        );
+      }
+    )
+  }
 
   ngOnDestroy() {
     this.resetSubscription.unsubscribe();
@@ -55,12 +68,22 @@ export class CalendarComponent implements OnInit, OnDestroy {
   }
 
   addBooking() {
-    this.router.navigate(['addBooking']);
+    this.router.navigate(['editBooking']);
+
   }
 
 
   deleteBooking(id: number) {
-    this.dataService.deleteBooking(id).subscribe();
+    this.message = 'deleting, p[lease wait...';
+    this.dataService.deleteBooking(id).subscribe(
+      next => {
+        this.loadData();
+        this.message = '';
+      },
+      error => {
+        this.message = 'Error has occured. Cannot remove this booking.';
+      }
+    );
   }
 
   dateChange() {

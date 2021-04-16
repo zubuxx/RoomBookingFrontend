@@ -1,20 +1,24 @@
-<h1>{{booking.id == null ? 'Add' : 'Edit'}} Booking</h1>
+<h1>{{booking?.id == null ? 'Add' : 'Edit'}} Booking</h1>
 
-<form>
+<div class="bg-warning p-5" *ngIf="message">{{message}}</div>
+
+<form *ngIf="dataLoaded" #bookingForm="ngForm">
   <div class="row">
     <div class="form-group col-4">
       <label for="date">Date</label>
-      <input type="date" class="form-control" id="date" [(ngModel)]="booking.date" name="date">
+      <input type="date" class="form-control" id="date" [(ngModel)]="booking.date" name="date" required>
     </div>
 
     <div class="form-group col-4">
       <label for="startTime">Start time</label>
-      <input type="time" class="form-control" id="startTime" [(ngModel)]="booking.startTime" name="startTime">
+      <input type="time" class="form-control" id="startTime" [(ngModel)]="booking.startTime" name="startTime"
+      required>
     </div>
 
     <div class="form-group col-4">
       <label for="endTime">End time</label>
-      <input type="time" class="form-control" id="endTime" [(ngModel)]="booking.endTime" name="endTime">
+      <input type="time" class="form-control" id="endTime" [(ngModel)]="booking.endTime" name="endTime"
+      required>
     </div>
 
   </div>
@@ -23,7 +27,7 @@
 
     <div class="form-group col-5">
       <label for="room">Room</label>
-      <select class="form-control" id="room" [(ngModel)]="booking.room" name="room">
+      <select class="form-control" id="room" [(ngModel)]="booking.room" name="room" required>
         <!-- repeat the option for each room -->
         <option *ngFor="let room of rooms" [ngValue]="room">{{room.name}}</option>
       </select>
@@ -31,7 +35,7 @@
 
     <div class="form-group col-5">
       <label for="layout">Layout</label>
-      <select class="form-control" id="layout" [(ngModel)]="booking.layout" name="layout">
+      <select class="form-control" id="layout" [(ngModel)]="booking.layout" name="layout" required>
         <!-- repeat the option for each layout -->
         <option *ngFor="let layout of layouts" [ngValue]="layoutEnum[layout]">{{layoutEnum[layout]}}</option>
       </select>
@@ -39,7 +43,7 @@
 
     <div class="form-group col-2">
       <label for="participants">Participants</label>
-      <input type="number" class="form-control" id="participants" [(ngModel)]="booking.participants" name="participants">
+      <input type="number" class="form-control" id="participants" [(ngModel)]="booking.participants" name="participants" required>
     </div>
 
   </div>
@@ -47,7 +51,7 @@
   <div class="row">
     <div class="form-group col-6">
       <label for="layout">User</label>
-      <select class="form-control" id="user" [(ngModel)]="booking.user" name="user">
+      <select class="form-control" id="user" [(ngModel)]="booking.user" name="user" required>
         <!-- repeat the option for each user -->
         <option *ngFor="let user of users" [ngValue]="user">{{user.name}}</option>
       </select>
@@ -55,13 +59,13 @@
 
     <div class="form-group col-6">
       <label for="title">Meeting title</label>
-      <input type="text" class="form-control" id="title" [(ngModel)]="booking.title" name="title">
+      <input type="text" class="form-control" id="title" [(ngModel)]="booking.title" name="title" required>
     </div>
   </div>
 
   <div class="row">
     <div class="col">
-      <button type="button" class="btn btn-primary" (click)="onSubmit()">Save</button>
+      <button type="button" class="btn btn-primary" (click)="onSubmit()" [disabled]="bookingForm.invalid">Save</button>
     </div>
   </div>
 </form>
