@@ -1,7 +1,7 @@
 <div class="roomDetails">
   <h2>Room details</h2>
-  <a class="btn btn-small btn-warning mr-3" (click)="editRoom()">edit</a>
-  <a class="btn btn-small btn-warning ml-3" (click)="deleteRoom()">delete</a>
+  <a class="btn btn-small btn-warning mr-3" (click)="editRoom()" *ngIf="isAdminUser">edit</a>
+  <a class="btn btn-small btn-warning ml-3" (click)="deleteRoom()" *ngIf="isAdminUser">delete</a>
   <div class="bg-warning p-5" *ngIf="message">{{message}}</div>
   <table>
     <tr>

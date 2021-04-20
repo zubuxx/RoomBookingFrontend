@@ -5,6 +5,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {DataService} from "../../../data.service";
 import {FormResetService} from "../../../form-reset.service";
 import {Subscription} from "rxjs";
+import {AuthService} from "../../../auth.service";
 
 @Component({
   selector: 'app-room-edit',
@@ -42,7 +43,8 @@ export class RoomEditComponent implements OnInit, OnDestroy {
   constructor(private formBuilder: FormBuilder,
               private dataService: DataService,
               private router: Router,
-              private formResetService: FormResetService) { }
+              private formResetService: FormResetService,
+              private authService: AuthService) { }
 
   ngOnInit(): void {
     this.initializeForm();
@@ -102,7 +104,7 @@ export class RoomEditComponent implements OnInit, OnDestroy {
         }
       );
     } else {
-      this.dataService.updateRomm(this.room).subscribe(
+      this.dataService.updateRomm(this.room, this.authService.jwtToken).subscribe(
         (next) => {
           this.dataChangedEvent.emit();
           this.router.navigate(['admin', 'rooms'], {queryParams: {action: 'view', id: next.id}});

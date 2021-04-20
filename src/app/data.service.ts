@@ -5,7 +5,7 @@ import {Observable, of} from "rxjs";
 import {Booking} from "./model/Booking";
 import {formatDate} from "@angular/common";
 import {environment} from "../environments/environment";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {map} from "rxjs/operators";
 
 
@@ -15,8 +15,9 @@ import {map} from "rxjs/operators";
 export class DataService {
 
 
-  getRooms() : Observable<Array<Room>> {
-    return this.http.get<Array<Room>>(environment.restUrl + '/api/v1/rooms')
+  getRooms(token: string) : Observable<Array<Room>> {
+    const headers = new HttpHeaders().append('Authorization', 'Bearer ' + token);
+    return this.http.get<Array<Room>>(environment.restUrl + '/api/v1/rooms', {headers})
       .pipe(
         map( data => {
           const rooms = new Array<Room>();
@@ -83,8 +84,9 @@ export class DataService {
     return this.http.post<User>(environment.restUrl + '/api/v1/users', fullUser);
   }
 
-  updateRomm(room: Room) : Observable<Room> {
-    return this.http.put<Room>(environment.restUrl +  '/api/v1/rooms', Room.toHttp(room));
+  updateRomm(room: Room, token: string) : Observable<Room> {
+    const headers = new HttpHeaders().append('Authorization', 'Bearer ' + token);
+    return this.http.put<Room>(environment.restUrl +  '/api/v1/rooms', Room.toHttp(room), {headers});
 
   }
 
@@ -106,6 +108,11 @@ export class DataService {
     return this.http.get(environment.restUrl + '/api/v1/users/resetPassword/' + id);
   }
 
+  validateUser(name: string, password: string) : Observable<{result: string}> {
+    const authData = btoa(`${name}:${password}`);
+    const headers = new HttpHeaders().append("Authorization", 'Basic ' + authData);
+    return this.http.get<{result: string}>(environment.restUrl + '/api/v1/basicAuth/validate', {headers : headers});
+  }
 
   constructor(private http: HttpClient) {
 

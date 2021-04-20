@@ -61,6 +61,11 @@ export class DataService {
     return of(null);
   }
 
+  validateUser(name: string, password: string) : Observable<{result: string}> {
+    return of({result: 'ok'});
+  }
+
+
   updateUser(user: User) : Observable<User> {
     const originalUser = this.users.find(u => u.id === user.id);
     originalUser.name = user.name;

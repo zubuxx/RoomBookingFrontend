@@ -3,6 +3,7 @@ import {DataService} from "../../data.service";
 import {Room} from "../../model/Room";
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormResetService} from "../../form-reset.service";
+import {AuthService} from "../../auth.service";
 
 @Component({
   selector: 'app-rooms',
@@ -18,14 +19,20 @@ export class RoomsComponent implements OnInit {
   loadingData = true;
   message = 'Please wait... getting the list of rooms.';
   reloadAttemps = 0;
+  isAdminUser = false;
 
   constructor(private dataService: DataService,
               private route: ActivatedRoute,
               private router: Router,
-              private formResetService: FormResetService) { }
+              private formResetService: FormResetService,
+              private authService: AuthService) { }
 
   ngOnInit(): void {
+
     this.loadData();
+    if (this.authService.getRole() === 'ADMIN') {
+      this.isAdminUser = true;
+    }
     // this.route.snapshot.queryParams['id'];
   }
 
@@ -50,7 +57,7 @@ export class RoomsComponent implements OnInit {
   }
 
   private loadData() {
-    this.dataService.getRooms().subscribe(
+    this.dataService.getRooms(this.authService.jwtToken).subscribe(
       (next) => {
         this.rooms = next;
         this.loadingData = false;
@@ -59,6 +66,7 @@ export class RoomsComponent implements OnInit {
         if (error.status === 402) {
           this.message = 'Sorry - you need to pay to use this application';
         } else {
+          console.log(error)
           this.reloadAttemps++;
           if (this.reloadAttemps <= 10) {
             this.message = 'Sorry - something went wrong, please trying again!... please wait! ';
