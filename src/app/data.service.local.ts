@@ -204,8 +204,9 @@ export class DataService {
     this.bookings.push(booking1);
     this.bookings.push(booking2);
 
-    console.log(environment.restUrl);
-
+  }
+  getRole() : Observable<{role: string}> {
+    return of( {role: "ADMIN"});
+  }
 
   }
-}

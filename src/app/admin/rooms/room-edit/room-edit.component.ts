@@ -104,7 +104,7 @@ export class RoomEditComponent implements OnInit, OnDestroy {
         }
       );
     } else {
-      this.dataService.updateRomm(this.room, this.authService.jwtToken).subscribe(
+      this.dataService.updateRomm(this.room).subscribe(
         (next) => {
           this.dataChangedEvent.emit();
           this.router.navigate(['admin', 'rooms'], {queryParams: {action: 'view', id: next.id}});

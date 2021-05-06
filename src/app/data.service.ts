@@ -15,9 +15,8 @@ import {map} from "rxjs/operators";
 export class DataService {
 
 
-  getRooms(token: string) : Observable<Array<Room>> {
-    const headers = new HttpHeaders().append('Authorization', 'Bearer ' + token);
-    return this.http.get<Array<Room>>(environment.restUrl + '/api/v1/rooms', {headers})
+  getRooms() : Observable<Array<Room>> {
+    return this.http.get<Array<Room>>(environment.restUrl + '/api/v1/rooms', {withCredentials : true})
       .pipe(
         map( data => {
           const rooms = new Array<Room>();
@@ -84,9 +83,8 @@ export class DataService {
     return this.http.post<User>(environment.restUrl + '/api/v1/users', fullUser);
   }
 
-  updateRomm(room: Room, token: string) : Observable<Room> {
-    const headers = new HttpHeaders().append('Authorization', 'Bearer ' + token);
-    return this.http.put<Room>(environment.restUrl +  '/api/v1/rooms', Room.toHttp(room), {headers});
+  updateRomm(room: Room) : Observable<Room> {
+    return this.http.put<Room>(environment.restUrl +  '/api/v1/rooms', Room.toHttp(room), {withCredentials : true});
 
   }
 
@@ -111,7 +109,12 @@ export class DataService {
   validateUser(name: string, password: string) : Observable<{result: string}> {
     const authData = btoa(`${name}:${password}`);
     const headers = new HttpHeaders().append("Authorization", 'Basic ' + authData);
-    return this.http.get<{result: string}>(environment.restUrl + '/api/v1/basicAuth/validate', {headers : headers});
+    return this.http.get<{result: string}>(environment.restUrl + '/api/v1/basicAuth/validate', {headers : headers, withCredentials : true});
+  }
+
+  getRole() : Observable<{role: string}> {
+    const headers = new HttpHeaders().append("X-Requested-With", "XMLHttpRequest")
+    return this.http.get<{role: string}>(environment.restUrl + '/api/v1/users/currentUserRole', {headers, withCredentials: true});
   }
 
   constructor(private http: HttpClient) {

@@ -30,7 +30,7 @@ export class RoomsComponent implements OnInit {
   ngOnInit(): void {
 
     this.loadData();
-    if (this.authService.getRole() === 'ADMIN') {
+    if (this.authService.role === 'ADMIN') {
       this.isAdminUser = true;
     }
     // this.route.snapshot.queryParams['id'];
@@ -57,7 +57,7 @@ export class RoomsComponent implements OnInit {
   }
 
   private loadData() {
-    this.dataService.getRooms(this.authService.jwtToken).subscribe(
+    this.dataService.getRooms().subscribe(
       (next) => {
         this.rooms = next;
         this.loadingData = false;
