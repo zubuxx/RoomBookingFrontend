@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {User} from "../../../model/User";
 import {DataService} from "../../../data.service";
 import {Router} from "@angular/router";
+import {AuthService} from "../../../auth.service";
 
 @Component({
   selector: 'app-user-detail',
@@ -20,10 +21,26 @@ export class UserDetailComponent implements OnInit {
   passwordMessage = '';
   passwordResetSuccess = false;
 
+  isAdminUser = false;
+
   constructor(private router: Router,
-              private dataService: DataService) { }
+              private dataService: DataService,
+              private authService: AuthService) { }
 
   ngOnInit(): void {
+    if (this.authService.role === 'ADMIN') {
+      this.isAdminUser = true;
+    }
+    this.authService.roleSetEvent.subscribe(
+      next => {
+        if (next === 'ADMIN') {
+          this.isAdminUser = true;
+        }
+        else {
+          this.isAdminUser = false;
+        }
+      }
+    )
   }
 
   clear() {

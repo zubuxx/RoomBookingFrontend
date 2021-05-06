@@ -1,7 +1,7 @@
 <div class="userDetails">
   <h2>User details</h2>
-  <a class="btn btn-small btn-warning mr-3" (click)="edit()">edit</a>
-  <a class="btn btn-small btn-warning ml-3" (click)="deleteUser()">delete</a>
+  <a class="btn btn-small btn-warning mr-3" (click)="edit()" *ngIf="isAdminUser">edit</a>
+  <a class="btn btn-small btn-warning ml-3" (click)="deleteUser()" *ngIf="isAdminUser">delete</a>
   <div class="bg-warning p-5" *ngIf="message">{{message}}</div>
   <table>
     <tr>

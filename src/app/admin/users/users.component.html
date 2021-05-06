@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-6">
     <h1>Users Admin</h1>
-    <a class="btn btn-warning mb-3" (click)="addUser()">add</a>
+    <a class="btn btn-warning mb-3" (click)="addUser()" *ngIf="isAdminUser">add</a>
     <table class="table">
       <thead>
       <tr>

@@ -4,6 +4,7 @@ import {Booking} from "../model/Booking";
 import {DataService} from "../data.service";
 import {Subscription} from "rxjs";
 import {ActivatedRoute, Router} from "@angular/router";
+import {AuthService} from "../auth.service";
 
 @Component({
   selector: 'app-calendar',
@@ -14,7 +15,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
   constructor(private dataService: DataService,
               private router: Router,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute,
+              private authService: AuthService) { }
 
   bookings: Array<Booking>;
 
@@ -23,12 +25,25 @@ export class CalendarComponent implements OnInit, OnDestroy {
   resetSubscription: Subscription;
 
   dataLoaded = false;
-
+  isAdminUser = false;
   message = '';
 
   ngOnInit(): void {
     this.loadData();
 
+    if (this.authService.role === "ADMIN") {
+      this.isAdminUser = true;
+    }
+    this.authService.roleSetEvent.subscribe(
+      next => {
+        if (next === 'ADMIN') {
+          this.isAdminUser = true;
+        }
+        else {
+          this.isAdminUser = false;
+        }
+      }
+    )
 
     // const data = formatDate(this.selectDate, 'yyyy-MM-dd', 'pl-PL');
 
