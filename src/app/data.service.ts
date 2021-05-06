@@ -29,7 +29,7 @@ export class DataService {
   }
 
   getUsers() : Observable<Array<User>> {
-    return this.http.get<Array<User>>(environment.restUrl + '/api/v1/users')
+    return this.http.get<Array<User>>(environment.restUrl + '/api/v1/users', {withCredentials : true})
       .pipe(
         map( data => {
           const users = new Array<User>();
@@ -67,20 +67,20 @@ export class DataService {
   }
 
   addBooking(newBooking: Booking): Observable<Booking> {
-    return this.http.post<Booking>(environment.restUrl + '/api/v1/bookings/', Booking.toHttp(newBooking));
+    return this.http.post<Booking>(environment.restUrl + '/api/v1/bookings/', Booking.toHttp(newBooking), {withCredentials : true});
   }
 
   deleteBooking(id: number): Observable<any> {
-    return this.http.delete(environment.restUrl + '/api/v1/bookings/' + id);
+    return this.http.delete(environment.restUrl + '/api/v1/bookings/' + id, {withCredentials : true});
       }
 
   updateUser(user: User) : Observable<User> {
-    return this.http.put<User>(environment.restUrl + '/api/v1/users', user);
+    return this.http.put<User>(environment.restUrl + '/api/v1/users', user, {withCredentials : true});
   }
 
   addUser(newUser: User, password: string) : Observable<User> {
     const fullUser = {id: newUser.id, name: newUser.name, password: password};
-    return this.http.post<User>(environment.restUrl + '/api/v1/users', fullUser);
+    return this.http.post<User>(environment.restUrl + '/api/v1/users', fullUser, {withCredentials : true});
   }
 
   updateRomm(room: Room) : Observable<Room> {
@@ -89,7 +89,7 @@ export class DataService {
   }
 
   addRoom(newRoom : Room) : Observable<Room> {
-    return this.http.post<Room>(environment.restUrl +  '/api/v1/rooms', Room.toHttp(newRoom));
+    return this.http.post<Room>(environment.restUrl +  '/api/v1/rooms', Room.toHttp(newRoom), {withCredentials : true});
     // return of(null);
 
   }
