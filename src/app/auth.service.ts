@@ -10,6 +10,7 @@ export class AuthService {
   isAuthenticated = false;
   authenticationResultEvent = new EventEmitter<boolean>();
   role: string;
+  roleSetEvent = new EventEmitter<string>();
 
   constructor(private dataService: DataService) { }
 
@@ -31,9 +32,6 @@ export class AuthService {
 
     );
 
-    if (name === 'kacper' && password === 'secret') {
-      this.isAuthenticated = true;
-    }
     return this.isAuthenticated;
   }
 
@@ -43,6 +41,7 @@ export class AuthService {
     this.dataService.getRole().subscribe(
       next => {
         this.role = next.role;
+        this.roleSetEvent.emit(next.role);
       }
     )
   }
@@ -51,12 +50,20 @@ export class AuthService {
     this.dataService.getRole().subscribe(
       next => {
         if(next.role !== '') {
+          this.role = next.role;
+          this.roleSetEvent.emit(next.role);
           this.isAuthenticated = true;
           this.authenticationResultEvent.emit(true);
         }
       }
 
     )
+  }
+
+  logout() {
+    this.dataService.logoutUser().subscribe();
+    this.isAuthenticated = false;
+    this.authenticationResultEvent.emit(false);
   }
 
 }

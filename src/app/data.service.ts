@@ -55,14 +55,14 @@ export class DataService {
   }
 
   getBooking(id: number) : Observable<Booking> {
-    return this.http.get<Booking>(environment.restUrl + '/api/v1/bookings?id=' + id)
+    return this.http.get<Booking>(environment.restUrl + '/api/v1/bookings?id=' + id, {withCredentials : true})
       .pipe(
         map(data => Booking.fromHttp(data))
       );
   }
 
   saveBooking(booking: Booking) : Observable<Booking> {
-    return this.http.put<Booking>(environment.restUrl + '/api/v1/bookings/', Booking.toHttp(booking));
+    return this.http.put<Booking>(environment.restUrl + '/api/v1/bookings/', Booking.toHttp(booking), {withCredentials : true});
 
   }
 
@@ -95,15 +95,15 @@ export class DataService {
   }
 
   deleteRoom(id: number) : Observable<any> {
-    return this.http.delete(environment.restUrl + '/api/v1/rooms/' + id);
+    return this.http.delete(environment.restUrl + '/api/v1/rooms/' + id, {withCredentials : true});
   }
 
   deleteUser(id: number) : Observable<any> {
-    return this.http.delete(environment.restUrl + '/api/v1/users/' + id);
+    return this.http.delete(environment.restUrl + '/api/v1/users/' + id, {withCredentials : true});
   }
 
   resetUserPassword(id: number) : Observable<any> {
-    return this.http.get(environment.restUrl + '/api/v1/users/resetPassword/' + id);
+    return this.http.get(environment.restUrl + '/api/v1/users/resetPassword/' + id, {withCredentials : true});
   }
 
   validateUser(name: string, password: string) : Observable<{result: string}> {
@@ -115,6 +115,11 @@ export class DataService {
   getRole() : Observable<{role: string}> {
     const headers = new HttpHeaders().append("X-Requested-With", "XMLHttpRequest")
     return this.http.get<{role: string}>(environment.restUrl + '/api/v1/users/currentUserRole', {headers, withCredentials: true});
+  }
+
+
+  logoutUser() : Observable<string> {
+    return this.http.get<string>(environment.restUrl + '/api/v1/users/logout', {withCredentials : true});
   }
 
   constructor(private http: HttpClient) {
