@@ -1,6 +1,6 @@
 # RoomBooking Application
 
-Web application designed to manage rooms renting, clients and reservations.
+Web application designed to manage renting rooms and reservations.
 
 ## Table of contents
 
@@ -34,7 +34,7 @@ All codes of backend are available [here](https://github.com/zubuxx/RoomBookingB
 
 ## Setup
 
-Run application by typing in command line: `ng serve`. App will run on port 4200 by default. Then navigate to `http://localhost:4200/`. Make sure, that backend has been already running properly.
+Run application by typing in command line: `ng serve`. App will run on port 4200 by default. Then navigate to `http://localhost:4200/`. Make sure that backend has been already running properly.
 If you need instructions, how to setup backend, check the [repository](https://github.com/zubuxx/RoomBookingBackend), please.
 
 ## Sources
