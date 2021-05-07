@@ -9,7 +9,7 @@ Web application designed to manage rooms renting, clients and reservations.
 - [Setup](#Setup)
 - [Sources](#Sources)
 
-## General
+## General info
 
 App has separate admin and user modules. Only admins can update, add and remove reservations, rooms and users. Users are only authorized to view the information. Calendar page allows to check all reservations for the particular day.
 
