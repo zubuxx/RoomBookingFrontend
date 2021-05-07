@@ -1,27 +1,43 @@
-# RoomBookingClient
+# RoomBooking Application
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.2.7.
+Web application designed to manage rooms renting, clients and reservations.
 
-## Development server
+## Table of contents
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+- [General info](#general-info)
+- [Technologies](#Technologies)
+- [Setup](#Setup)
+- [Sources](#Sources)
 
-## Code scaffolding
+## General
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+App has separate admin and user modules. Only admins can update, add and remove reservations, rooms and users. Users are only authorized to view the information. Calendar page allows to check all reservations for the particular day.
 
-## Build
+## Technologies
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+Following technologies are used in the project:
 
-## Running unit tests
+Frontend:
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+- Angular CLI version: 11.2.7
+- Bootstrap version:
+- CSS
 
-## Running end-to-end tests
+Backend:
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+- Spring Boot version: 2.4.5
+- PostgreSQL: 13.2
+- Spring Data JPA version: 2.5.0
+- Spring Security version: 5.4.6
 
-## Further help
+All codes of backend are available [here](https://github.com/zubuxx/RoomBookingBackend).
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+## Setup
+
+Run application by typing in command line: `ng serve`. App will run on port 4200 by default. Then navigate to `http://localhost:4200/`. Make sure, that backend has been already running properly.
+If you need instructions, how to setup backend, check the [repository](https://github.com/zubuxx/RoomBookingBackend), please.
+
+## Sources
+
+Project is inspired by the course
+"Angular for java developers." created by Matt Greencroft.
