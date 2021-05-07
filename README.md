@@ -20,7 +20,7 @@ Following technologies are used in the project:
 Frontend:
 
 - Angular CLI version: 11.2.7
-- Bootstrap version:
+- Bootstrap version: 4.6.8
 - CSS
 
 Backend:
